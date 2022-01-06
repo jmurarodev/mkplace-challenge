@@ -11,16 +11,8 @@ export async function handle(event) {
     if (!connected) return { statusCode: 503, body: 'Connection Error' };
     
     const filter = event.queryStringParameters ?? null;
-    if (filter.min_price || filter.max_price) {
-      var priceRange = {
-          $gte: filter.min_price,
-          $lte: filter.max_price 
-      }
-    }
 
-    // console.log(priceRange)
-    const products = await Product.find(priceRange ?? null);
-    // const products = await Product.find(and((eq('price', filter.min_price), lt('price', filter.max_price))));
+    const products = await Product.find(filter);
   
     return { statusCode: 200, body: JSON.stringify(products) };
   } catch (err) {
